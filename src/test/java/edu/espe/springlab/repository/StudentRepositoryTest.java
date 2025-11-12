@@ -1,0 +1,32 @@
+package edu.espe.springlab.repository;
+
+import edu.espe.springlab.domain.Student;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.time.LocalDate;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+@DataJpaTest
+public class StudentRepositoryTest {
+    @Autowired
+    private StudentRepository repository;
+
+    @Test
+    void shouldSaveAndFindStudentByEmail(){
+        Student s = new Student();
+        s.setFullName("test user");
+        s.setEmail("test@example.com");
+        s.setBirthDate(LocalDate.of(1990,2,2));
+        s.setActive(true);
+
+        repository.save(s);
+
+        var result = repository.findByEmail("test@example.com");
+        assertThat(result).isPresent();
+        assertThat(result.get().getFullName()).isEqualTo("Test User");
+
+    }
+}
