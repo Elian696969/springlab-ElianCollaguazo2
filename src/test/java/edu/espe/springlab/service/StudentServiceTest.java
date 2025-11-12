@@ -3,6 +3,8 @@ package edu.espe.springlab.service;
 import edu.espe.springlab.domain.Student;
 import edu.espe.springlab.dto.StudentRequestData;
 import edu.espe.springlab.repository.StudentRepository;
+import edu.espe.springlab.service.impl.StudentServiceImpl;
+import edu.espe.springlab.web.advice.ConflictException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -13,7 +15,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
-@Import({StudentService.class}) // Importa el servicio real, no la clase de test
+@Import({StudentServiceImpl.class}) // Importa el servicio real, no la clase de test
 public class StudentServiceTest {
 
     @Autowired
@@ -38,8 +40,8 @@ public class StudentServiceTest {
         req.setBirthDate(LocalDate.of(1990, 2, 2));
 
 
+        // Verificar que lance excepción por duplicado
         assertThatThrownBy(() -> service.create(req))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Email already exists");
+                .isInstanceOf(ConflictException.class);
     }
 }

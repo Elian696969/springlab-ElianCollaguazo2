@@ -1,7 +1,7 @@
 #Etapa1: Build
 FROM gradle:8.4-jdk17 AS builder
 WORKDIR /app
-COPY ..
+COPY . .
 RUN gradle clean bootJar
 
 #Etapa2: Run
